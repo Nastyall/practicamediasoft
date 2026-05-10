@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="1" author="developer">
+        <createTable tableName="teams">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="matches">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="season" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="match_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="home_team_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="away_team_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="home_goals" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="away_goals" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="matches"
+                baseColumnNames="home_team_id"
+                referencedTableName="teams"
+                referencedColumnNames="id"
+                constraintName="fk_matches_home_team"
+                onDelete="RESTRICT"/>
+
+        <addForeignKeyConstraint
+                baseTableName="matches"
+                baseColumnNames="away_team_id"
+                referencedTableName="teams"
+                referencedColumnNames="id"
+                constraintName="fk_matches_away_team"
+                onDelete="RESTRICT"/>
+
+        <createIndex tableName="matches" indexName="idx_match_date">
+            <column name="match_date"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
